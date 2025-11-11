@@ -83,17 +83,81 @@ This app is designed for **local use only** — all processing happens in your b
 
 ```plaintext
 .
-├── .github/
-│   └── workflows/
-├── public/assets/
-│   ├── preview.gif
-│   └── feature.gif
-├── src/
-│   ├── app/
-│   ├── components/
-│   └── utils/
+├── .github
+│   ├── ISSUE_TEMPLATE
+│   │   ├── bug.yml
+│   │   ├── config.yml
+│   │   ├── documentation.yml
+│   │   ├── enhancement_refactor.yml
+│   │   ├── feature_request.yml
+│   │   └── question_discussion.yml
+│   ├── pull_request_template.md
+│   └── workflows
+│       └── NomStack.yml
+├── .gitignore
+├── .husky
+│   ├── _
+│   │   ├── .gitignore
+│   │   ├── applypatch-msg
+│   │   ├── commit-msg
+│   │   ├── h
+│   │   ├── husky.sh
+│   │   ├── post-applypatch
+│   │   ├── post-checkout
+│   │   ├── post-commit
+│   │   ├── post-merge
+│   │   ├── post-rewrite
+│   │   ├── pre-applypatch
+│   │   ├── pre-auto-gc
+│   │   ├── pre-commit
+│   │   ├── pre-merge-commit
+│   │   ├── pre-push
+│   │   ├── pre-rebase
+│   │   └── prepare-commit-msg
+│   ├── pre-commit
+│   └── pre-push
+├── .prettierignore
+├── .prettierrc
+├── .prettierrc.json
+├── .prettierrc.yml
+├── .stylelintrc.json
+├── docs
+├── index.html
+├── LICENSE
+├── LICENSE copy
+├── package-lock.json
 ├── package.json
-└── README.md
+├── public
+│   ├── .DS_Store
+│   └── assets
+│       ├── .DS_Store
+│       ├── clocksabound.svg
+│       └── preview.gif
+├── README copy.md
+├── README.md
+├── scripts
+│   └── precheck.sh
+├── src
+│   └── app
+│       ├── api
+│       ├── App.tsx
+│       ├── components
+│       ├── features
+│       ├── hooks
+│       │   └── useLocalStorage.ts
+│       ├── lib
+│       ├── main.tsx
+│       ├── pages
+│       ├── styles
+│       │   └── global.css
+│       └── utils
+│           └── move.ts
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+├── vite-env.d.ts
+└── vite.config.ts
+
 ```
 </details>
 
