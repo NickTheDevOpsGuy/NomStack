@@ -1,0 +1,24 @@
+<!-- ClocksAbound favicon (solid dial) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-label="ClocksAbound favicon">
+  <!-- Dial -->
+  <circle cx="32" cy="32" r="28" fill="#0f172a"/> <!-- slate-900 -->
+  <!-- Rim -->
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#38bdf8" stroke-width="4"/> <!-- sky-400 -->
+
+  <!-- Major ticks -->
+  <g stroke="#38bdf8" stroke-linecap="round" stroke-width="4">
+    <line x1="32" y1="8"  x2="32" y2="14"/>
+    <line x1="56" y1="32" x2="50" y2="32"/>
+    <line x1="32" y1="56" x2="32" y2="50"/>
+    <line x1="8"  y1="32" x2="14" y2="32"/>
+  </g>
+
+  <!-- Hands -->
+  <g stroke-linecap="round">
+    <line x1="32" y1="32" x2="24" y2="20" stroke="#facc15" stroke-width="5"/> <!-- hour (amber-400) -->
+    <line x1="32" y1="32" x2="48" y2="24" stroke="#f59e0b" stroke-width="4"/> <!-- minute (amber-500) -->
+  </g>
+
+  <!-- Hub -->
+  <circle cx="32" cy="32" r="3.5" fill="#f8fafc"/>
+</svg>
