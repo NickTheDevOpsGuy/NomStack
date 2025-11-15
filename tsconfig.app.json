@@ -22,7 +22,8 @@
       "@components/*": ["src/app/components/*"],
       "@hooks/*": ["src/app/hooks/*"],
       "@lib/*": ["src/app/lib/*"],
-      "@types/*": ["src/app/types/*"]
+      "@types/*": ["src/app/types/*"],
+      "@utils/*": ["src/app/utils/*"]
     }
   },
 

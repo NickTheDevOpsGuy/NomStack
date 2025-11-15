@@ -1,7 +1,14 @@
-import { API_BASE } from '@/utils/constants';
+import type { DishEntry } from "@/types/dish.types"; // or wherever
 
-export async function fetchDish(word: string, signal?: AbortSignal) {
-  const res = await fetch(`${API_BASE}${encodeURIComponent(word)}`, { signal });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
+export function fetchDish(raw: any): DishEntry {
+  // map raw API response -> { name, variants, ... }
+  return {
+    name: raw.meals[0].strMeal,
+    variants: [
+      {
+        label: raw.meals[0].strArea,
+        description: raw.meals[0].strInstructions,
+      },
+    ],
+  };
 }
