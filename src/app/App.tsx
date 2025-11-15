@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { SearchBar } from '@/components/SearchBar/SearchBar';
+import { DishResult } from "@/components/DishResult/DishResult";
 import { Loading, Empty, ErrorMessage } from '@/components/StateDisplay';
 import { useDishLookup } from '@hooks/useDishLookup';
 import { useLocalStorage } from '@hooks/useLocalStorage';
@@ -232,7 +233,7 @@ export default function App() {
             </div>
 
             {filteredData.senses?.length ? (
-              <DictionaryResult data={filteredData} term={query} />
+              <DishResult data={filteredData} term={query} />
             ) : (
               <div className='rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900'>
                 <p className='text-sm text-zinc-700 dark:text-zinc-300'>
