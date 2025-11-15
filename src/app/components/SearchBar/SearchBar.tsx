@@ -6,20 +6,20 @@ interface SearchBarProps {
 
 export function SearchBar({ value, onChange, onSubmit }: SearchBarProps) {
   const submit = () => {
-    console.log("Submitting:", value);
+    console.log('Submitting:', value);
     if (!value.trim()) return; // guard empty
     onSubmit?.(value.trim()); // hand off to parent
   };
 
   return (
     <input
-      type="text"
+      type='text'
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      placeholder="What dish are you looking for?"
-      className="w-full rounded border px-3 py-2"
+      placeholder='What dish are you looking for?'
+      className='w-full rounded border px-3 py-2'
       onKeyDown={(e) => {
-        if (e.key === "Enter") submit();
+        if (e.key === 'Enter') submit();
       }}
     />
   );
