@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { SearchBar } from '@/components/SearchBar/SearchBar';
-import { DishResult } from "@/components/DishResult/DishResult";
+import { DishResult } from '@/components/DishResult/DishResult';
 import { Loading, Empty, ErrorMessage } from '@/components/StateDisplay';
 import { useDishLookup } from '@hooks/useDishLookup';
 import { useLocalStorage } from '@hooks/useLocalStorage';
