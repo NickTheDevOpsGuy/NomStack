@@ -16,12 +16,14 @@ _Short tagline about what this project does_ 🦝
 ## 🖼 Preview
 
 ### Main App Demo
+
 ![App Demo GIF](./public/assets/preview.gif)
 
 ### Feature Highlights
+
 ![Feature Showcase](./public/assets/feature.gif)
 
-> 🎞️ *Previews are short animated GIFs recorded directly from the live app using screen capture — perfect for quick demos in READMEs.*
+> 🎞️ _Previews are short animated GIFs recorded directly from the live app using screen capture — perfect for quick demos in READMEs._
 
 ---
 
@@ -74,6 +76,7 @@ This app is designed for **local use only** — all processing happens in your b
    ```bash
    npm run dev
    ```
+
 ---
 
 ## 📂 Project Structure
@@ -159,6 +162,7 @@ This app is designed for **local use only** — all processing happens in your b
 └── vite.config.ts
 
 ```
+
 </details>
 
 ---
