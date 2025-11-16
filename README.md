@@ -92,6 +92,7 @@ A tiny, fast, privacy-friendly recipe search tool that helps you find dishes ins
 
 ```plaintext
 .
+├── eslint.config.ts
 ├── .github
 │   ├── ISSUE_TEMPLATE
 │   │   ├── bug.yml
