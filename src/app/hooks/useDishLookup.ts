@@ -5,8 +5,8 @@ import { fetchDish } from '@/utils/fetchDish';
 import type { DishEntry, DishVariant } from '@/types/dish.types';
 import { DEBOUNCE_MS } from '@/utils/constants';
 
-// Urban Dictionary endpoint
-const API_BASE = 'https://api.urbandictionary.com/v0/define?term=search.php?s=';
+// TheMealDB api endpoint
+const API_BASE = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
