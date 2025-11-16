@@ -17,7 +17,7 @@ A tiny, fast, privacy-friendly recipe search tool that helps you find dishes ins
 
 ### Main App Demo
 
-![App Demo](./public/assets/preview.mp4)
+![App Demo](./public/assets/preview.gif)
 
 > 🎞️ _Previews are short animated GIFs recorded directly from the live app using screen capture — perfect for quick demos in READMEs._
 

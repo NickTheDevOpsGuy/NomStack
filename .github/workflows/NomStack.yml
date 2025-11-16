@@ -1,4 +1,4 @@
-# .github/workflows/ClocksAbound.yml
+# .github/workflows/NomStack.yml
 name: 🕰️ NomStack
 
 on:
