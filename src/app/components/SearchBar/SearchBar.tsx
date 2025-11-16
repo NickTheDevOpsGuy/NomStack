@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 interface SearchBarProps {
   value: string;
@@ -24,23 +24,23 @@ export function SearchBar({
   return (
     <>
       <input
-        type="text"
+        type='text'
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="What dish are you looking for?"
-        className="w-full rounded border px-3 py-2"
+        placeholder='What dish are you looking for?'
+        className='w-full rounded border px-3 py-2'
         onKeyDown={(e) => {
-          if (e.key === "Enter") submit();
+          if (e.key === 'Enter') submit();
         }}
       />
       <input
-        type="text"
+        type='text'
         value={proteinValue}
         onChange={(e) => onProteinChange(e.target.value)}
-        placeholder="Filter by protein (chicken, beef, tofu…)"
-        className="mt-2 w-full rounded border px-3 py-2"
+        placeholder='Filter by protein (chicken, beef, tofu…)'
+        className='mt-2 w-full rounded border px-3 py-2'
         onKeyDown={(e) => {
-          if (e.key === "Enter") submit();
+          if (e.key === 'Enter') submit();
         }}
       />
     </>
