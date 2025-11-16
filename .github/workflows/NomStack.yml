@@ -1,13 +1,16 @@
 # .github/workflows/ClocksAbound.yml
-name: 🕰️ ClocksAbound — CI (Prettier · ESLint · TSC)
+name: 🕰️ NomStack
 
 on:
+  push:
+    branches:
+      - develop
   pull_request:
     branches:
       - develop
 
 concurrency:
-  group: ClocksAbound-${{ github.ref }}
+  group: NomStack-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:

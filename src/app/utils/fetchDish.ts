@@ -1,4 +1,4 @@
-import type { DishEntry } from '@/types/dish.types'; // or wherever
+import type { DishEntry } from "@/types/dish.types"; // or wherever
 
 export function fetchDish(raw: any): DishEntry {
   // map raw API response -> { name, variants, ... }
