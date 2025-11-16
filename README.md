@@ -17,11 +17,7 @@ _Short tagline about what this project does_ 🦝
 
 ### Main App Demo
 
-![App Demo GIF](./public/assets/preview.gif)
-
-### Feature Highlights
-
-![Feature Showcase](./public/assets/feature.gif)
+![App Demo GIF](#)
 
 > 🎞️ _Previews are short animated GIFs recorded directly from the live app using screen capture — perfect for quick demos in READMEs._
 
