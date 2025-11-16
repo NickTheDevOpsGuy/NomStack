@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { SearchBar } from '@/components/SearchBar/SearchBar';
 import { DishResult } from '@/components/DishResult/DishResult';
 import { Loading, Empty, ErrorMessage } from '@/components/StateDisplay';
@@ -98,6 +98,19 @@ export default function App() {
     setFavs([]);
     setQuery('');
     pushQueryToUrl('');
+  };
+
+  export function App() {
+  const [name, setName] = useState('');
+  const [protein, setProtein] = useState('');
+
+  const handleSubmit = (nameValue: string, proteinFilter: string) => {
+    // do your search here
+    console.log('SEARCH:', { nameValue, proteinFilter });
+
+    // now clear the inputs
+    setName('');
+    setProtein('');
   };
 
   return (
