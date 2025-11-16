@@ -44,7 +44,8 @@ A tiny, fast, privacy-friendly recipe search tool that helps you find dishes ins
 - [ ] Dark mode polish
 - [ ] Export favorites list
 - [ ] Recipe card sharing
-- [ ] 
+- [ ]
+
 ---
 
 ## 🛠 Tech Stack

@@ -16,11 +16,11 @@ export function SearchBar({
   onSubmit,
 }: SearchBarProps) {
   const submit = () => {
-  const name = value.trim();
-  const protein = proteinValue.trim();
-  if (!name && !protein) return; 
-  onSubmit?.(name, protein);
-};
+    const name = value.trim();
+    const protein = proteinValue.trim();
+    if (!name && !protein) return;
+    onSubmit?.(name, protein);
+  };
 
   return (
     <>
