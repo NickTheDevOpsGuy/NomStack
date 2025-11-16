@@ -105,24 +105,6 @@ A tiny, fast, privacy-friendly recipe search tool that helps you find dishes ins
 │       └── NomStack.yml
 ├── .gitignore
 ├── .husky
-│   ├── _
-│   │   ├── applypatch-msg
-│   │   ├── commit-msg
-│   │   ├── .gitignore
-│   │   ├── h
-│   │   ├── husky.sh
-│   │   ├── post-applypatch
-│   │   ├── post-checkout
-│   │   ├── post-commit
-│   │   ├── post-merge
-│   │   ├── post-rewrite
-│   │   ├── pre-applypatch
-│   │   ├── pre-auto-gc
-│   │   ├── pre-commit
-│   │   ├── pre-merge-commit
-│   │   ├── prepare-commit-msg
-│   │   ├── pre-push
-│   │   └── pre-rebase
 │   ├── pre-commit
 │   └── pre-push
 ├── index.html
@@ -135,10 +117,8 @@ A tiny, fast, privacy-friendly recipe search tool that helps you find dishes ins
 ├── .prettierrc.yml
 ├── public
 │   ├── assets
-│   │   ├── .DS_Store
 │   │   ├── nomstack.svg
-│   │   └── preview.gif
-│   └── .DS_Store
+│   │   └── preview.mp4
 ├── README.md
 ├── scripts
 │   └── precheck.sh
