@@ -1,20 +1,20 @@
-import { useEffect, useRef, useState } from 'react';
-import axios, { AxiosError } from 'axios';
-import { useDebouncedValue } from '@/hooks/useDebouncedValue';
-import { fetchDish } from '@/utils/fetchDish';
-import type { DishEntry, DishVariant } from '@/types/dish.types';
-import { DEBOUNCE_MS } from '@/utils/constants';
+import { useEffect, useRef, useState } from "react";
+import axios, { AxiosError } from "axios";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import { fetchDish } from "@/utils/fetchDish";
+import type { DishEntry, DishVariant } from "@/types/dish.types";
+import { DEBOUNCE_MS } from "@/utils/constants";
 
 // TheMealDB api endpoint
-const API_BASE = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+const API_BASE = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
 
-type Status = 'idle' | 'loading' | 'success' | 'error';
+type Status = "idle" | "loading" | "success" | "error";
 
-export function useDishLookup(initialQuery = '') {
+export function useDishLookup(initialQuery = "") {
   const [query, setQuery] = useState(initialQuery);
   const debounced = useDebouncedValue(query, DEBOUNCE_MS);
 
-  const [status, setStatus] = useState<Status>('idle');
+  const [status, setStatus] = useState<Status>("idle");
   const [data, setData] = useState<DishEntry | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,7 +25,7 @@ export function useDishLookup(initialQuery = '') {
   useEffect(() => {
     const term = debounced.trim();
     if (!term) {
-      setStatus('idle');
+      setStatus("idle");
       setData(null);
       setError(null);
       controllerRef.current?.abort();
@@ -35,7 +35,7 @@ export function useDishLookup(initialQuery = '') {
     const key = term.toLowerCase();
     const cached = cacheRef.current.get(key);
     if (cached) {
-      setStatus('success');
+      setStatus("success");
       setData(cached);
       setError(null);
       return;
@@ -48,7 +48,7 @@ export function useDishLookup(initialQuery = '') {
 
     (async () => {
       try {
-        setStatus('loading');
+        setStatus("loading");
         setError(null);
 
         const url = `${API_BASE}${encodeURIComponent(term)}`;
@@ -59,12 +59,12 @@ export function useDishLookup(initialQuery = '') {
 
         if (reqIdRef.current === rid) {
           setData(normalized);
-          setStatus('success');
+          setStatus("success");
         }
       } catch (err: unknown) {
         if (controller.signal.aborted) return;
 
-        let msg = 'Request failed';
+        let msg = "Request failed";
         if (axios.isAxiosError(err)) {
           const ax = err as AxiosError;
           if (ax.response?.status === 404) msg = `No results for "${term}"`;
@@ -74,7 +74,7 @@ export function useDishLookup(initialQuery = '') {
         }
 
         setError(msg);
-        if (reqIdRef.current === rid) setStatus('error');
+        if (reqIdRef.current === rid) setStatus("error");
       }
     })();
 
