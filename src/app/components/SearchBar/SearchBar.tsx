@@ -14,12 +14,12 @@ export function SearchBar({
   onSubmit,
 }: SearchBarProps) {
   const submit = () => {
-    console.log("Submitting:", value);
+    console.log('Submitting:', value);
 
     const name = value.trim();
     const protein = proteinValue.trim();
-      setDishName(name);
-      setProtein(protein);
+    setDishName(name);
+    setProtein(protein);
     if (!name && !protein) return; // both empty? do nothing
     onSubmit?.(name, protein); // hand both to parent
   };
@@ -27,23 +27,23 @@ export function SearchBar({
   return (
     <>
       <input
-        type="text"
+        type='text'
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="What dish are you looking for?"
-        className="w-full rounded border px-3 py-2"
+        placeholder='What dish are you looking for?'
+        className='w-full rounded border px-3 py-2'
         onKeyDown={(e) => {
-          if (e.key === "Enter") submit();
+          if (e.key === 'Enter') submit();
         }}
       />
       <input
-        type="text"
+        type='text'
         value={proteinValue}
         onChange={(e) => onProteinChange(e.target.value)}
-        placeholder="Filter by protein (chicken, beef, tofu…)"
-        className="mt-2 w-full rounded border px-3 py-2"
+        placeholder='Filter by protein (chicken, beef, tofu…)'
+        className='mt-2 w-full rounded border px-3 py-2'
         onKeyDown={(e) => {
-          if (e.key === "Enter") submit();
+          if (e.key === 'Enter') submit();
         }}
       />
     </>
