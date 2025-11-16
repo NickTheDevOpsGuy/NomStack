@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 interface SearchBarProps {
   value: string;
   onChange: (val: string) => void;
@@ -14,15 +16,11 @@ export function SearchBar({
   onSubmit,
 }: SearchBarProps) {
   const submit = () => {
-    console.log('Submitting:', value);
-
-    const name = value.trim();
-    const protein = proteinValue.trim();
-    setDishName(name);
-    setProtein(protein);
-    if (!name && !protein) return; // both empty? do nothing
-    onSubmit?.(name, protein); // hand both to parent
-  };
+  const name = value.trim();
+  const protein = proteinValue.trim();
+  if (!name && !protein) return; 
+  onSubmit?.(name, protein);
+};
 
   return (
     <>
