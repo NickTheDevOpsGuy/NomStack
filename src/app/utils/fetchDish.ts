@@ -1,13 +1,24 @@
-import type { DishEntry } from '@/types/dish.types'; // or wherever
+import type { DishEntry } from '@/types/dish.types';
 
-export function fetchDish(raw: any): DishEntry {
-  // map raw API response -> { name, variants, ... }
+// Define the minimal shape of the API you're parsing.
+// This avoids `any` and keeps ESLint happy.
+interface MealApiResponse {
+  meals: Array<{
+    strMeal: string;
+    strArea?: string;
+    strInstructions: string;
+  }>;
+}
+
+export function fetchDish(raw: MealApiResponse): DishEntry {
+  const meal = raw.meals[0];
+
   return {
-    name: raw.meals[0].strMeal,
+    name: meal.strMeal,
     variants: [
       {
-        label: raw.meals[0].strArea,
-        description: raw.meals[0].strInstructions,
+        label: meal.strArea ?? 'Unknown',
+        description: meal.strInstructions,
       },
     ],
   };

@@ -74,9 +74,7 @@ function DefinitionItem({
 }: DefinitionItemProps) {
   const [expanded, setExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [showVariants, setShowVariants] = useState(true); // unused but kept to match your file
 
-  const steps = sense.def.split(/(?<=\.)\s+/);
   const limit = 260;
   const isLong = sense.def.length > limit;
   const displayed =
