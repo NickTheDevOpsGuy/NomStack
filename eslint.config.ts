@@ -1,82 +1,62 @@
-// eslint.config.js
 import js from '@eslint/js';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import importPlugin from 'eslint-plugin-import';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 
 export default [
-  // 🧹 Ignore build + coverage folders
-  { ignores: ['dist', 'coverage'] },
-
-  // ✅ Base + TypeScript + React presets
+  // Base JS rules
   js.configs.recommended,
+
+  // TypeScript rules
   ...tseslint.configs.recommended,
-  reactHooks.configs['recommended-latest'],
-  reactRefresh.configs.vite,
 
-  // 🧩 App code (browser)
   {
-    files: ['src/**/*.{ts,tsx,js,jsx}'],
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
-      parser: tseslint.parser,
-      ecmaVersion: 'latest',
+      ecmaVersion: 2020,
       sourceType: 'module',
-      parserOptions: { ecmaFeatures: { jsx: true } },
       globals: globals.browser,
+      parserOptions: {
+        project: './tsconfig.json',
+      },
     },
-    plugins: { react },
-    rules: {
-      // 🧠 React 17+ no longer requires importing React in JSX
-      'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
 
-      // 🧹 Lint polish
+    plugins: {
+      react,
+      'react-hooks': reactHooks,
+      import: importPlugin,
+      'jsx-a11y': jsxA11y,
+    },
+
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+
+    rules: {
+      // --- React ---
+      'react/react-in-jsx-scope': 'off', // <-- FIXES ALL YOUR JSX ERRORS
+      'react/jsx-uses-react': 'off',
+      'react/jsx-uses-vars': 'warn',
+
+      // --- Hooks ---
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+
+      // --- Imports ---
+      'import/order': 'off',
+
+      // --- General TS/JS rules ---
       '@typescript-eslint/no-unused-vars': [
         'warn',
-        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+        { argsIgnorePattern: '^_' },
       ],
-      '@typescript-eslint/no-unused-expressions': [
-        'error',
-        { allowShortCircuit: true, allowTernary: true },
-      ],
-      'react-hooks/exhaustive-deps': 'warn',
-    },
-    settings: {
-      react: { version: 'detect' },
-    },
-  },
 
-  // 🧪 Tests (Vitest)
-  {
-    files: ['tests/**/*.{ts,tsx,js,jsx}', '**/*.test.{ts,tsx,js,jsx}'],
-    languageOptions: {
-      parser: tseslint.parser,
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      parserOptions: { ecmaFeatures: { jsx: true } },
-      globals: { ...globals.browser, ...globals.vitest },
-    },
-    plugins: { react },
-    rules: {
-      'react/react-in-jsx-scope': 'off',
-    },
-  },
-
-  // ⚙️ Config + scripts (Node env)
-  {
-    files: [
-      '*.config.{js,cjs,mjs,ts}',
-      'vite.config.*',
-      'vitest.config.*',
-      'scripts/**',
-    ],
-    languageOptions: {
-      parser: tseslint.parser,
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      globals: globals.node,
+      'no-unused-vars': 'off', // TS handles it
     },
   },
 ];

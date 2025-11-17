@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 interface SearchBarProps {
   value: string; // dish name input
   onChange: (val: string) => void;
@@ -16,18 +18,8 @@ export function SearchBar({
   const submit = () => {
     const name = value.trim();
     const protein = proteinValue.trim();
-
-    // both empty? do nothing
     if (!name && !protein) return;
-
     onSubmit?.(name, protein);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      submit();
-    }
   };
 
   return (

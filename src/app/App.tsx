@@ -9,9 +9,8 @@ export default function App() {
   // Active query that drives the API / lookup:
   const { query, setQuery, status, data, error } = useDishLookup('');
 
-  // Form inputs are independent from the active query:
-  const [nameInput, setNameInput] = useState('');
-  const [proteinInput, setProteinInput] = useState('');
+  const [name, setName] = useState('');
+  const [protein, setProtein] = useState('');
 
   // persisted local data
   const [recent, setRecent] = useLocalStorage<string[]>('recent-words', []);
@@ -23,7 +22,7 @@ export default function App() {
     const q = raw.trim().slice(0, 64);
     if (q) {
       setQuery(q);
-      setNameInput(q); // show initial query in the top input
+      setName(q); // prefill main input from URL if present
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -39,14 +38,13 @@ export default function App() {
     window.history.replaceState(null, '', qs ? `${base}?${qs}` : base);
   };
 
-  // Called when SearchBar submits (from either field)
-  const handleSubmit = (name: string, protein: string) => {
-    const trimmedName = name.trim().slice(0, 64);
-    const trimmedProtein = protein.trim().slice(0, 64);
+  const handleSubmit = (nameInput: string, proteinInput: string) => {
+    const combined = [nameInput.trim(), proteinInput.trim()]
+      .filter(Boolean)
+      .join(' ');
 
-    // Prefer dish name; fall back to protein if name is empty
-    const primary = trimmedName || trimmedProtein;
-    if (!primary) return;
+    const next = combined.slice(0, 64);
+    if (!next) return;
 
     // update active query (drives lookup hook)
     setQuery(primary);
@@ -59,11 +57,13 @@ export default function App() {
         ...r.filter((w) => w.toLowerCase() !== primary.toLowerCase()),
       ].slice(0, 5)
     );
-    // NOTE: we do NOT change nameInput/proteinInput here.
-    // They stay whatever the user typed.
+
+    // clear both text fields after submit
+    setName('');
+    setProtein('');
   };
 
-  // Esc key to clear BOTH inputs and the active query
+  // Esc key to clear query + inputs
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -71,6 +71,8 @@ export default function App() {
         setProteinInput('');
         setQuery('');
         pushQueryToUrl('');
+        setName('');
+        setProtein('');
       }
     };
     window.addEventListener('keydown', onKey);
@@ -101,11 +103,8 @@ export default function App() {
 
   // retry on error
   const retry = () => {
-    const last = query.trim();
-    if (!last) return;
-    // just re-run the last active query
-    setQuery(last);
-    pushQueryToUrl(last);
+    if (!query.trim()) return;
+    handleSubmit(query, '');
   };
 
   // wipe all local state
@@ -124,19 +123,21 @@ export default function App() {
     setProteinInput('');
     setQuery('');
     pushQueryToUrl('');
+    setName('');
+    setProtein('');
   };
 
   return (
-    <div className='min-h-screen bg-gradient-to-b from-zinc-50 to-zinc-100 text-zinc-900 dark:from-zinc-950 dark:to-zinc-900 dark:text-zinc-100'>
+    <div className='min-h-screen bg-gradient-to-b from-sky-50 via-slate-50 to-slate-100 text-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-sky-950 dark:text-slate-100'>
       <main className='mx-auto max-w-2xl space-y-6 px-4 py-8'>
         {/* Header */}
         <header className='space-y-1'>
-          <h1 className='bg-gradient-to-r from-indigo-500 via-pink-500 to-amber-500 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent'>
+          <h1 className='bg-gradient-to-r from-sky-500 via-indigo-500 to-slate-700 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent'>
             Nom Stack
           </h1>
-          <p className='text-sm text-zinc-600 dark:text-zinc-400'>
-            Type a dish or protein and press{' '}
-            <kbd className='rounded bg-zinc-200 px-1 py-0.5 dark:bg-zinc-800'>
+          <p className='text-sm text-slate-600 dark:text-slate-300'>
+            Type a dish and press{' '}
+            <kbd className='rounded bg-sky-100 px-1 py-0.5 font-mono text-xs text-slate-800 dark:bg-sky-900/60 dark:text-sky-100'>
               Enter
             </kbd>
             .
@@ -144,14 +145,14 @@ export default function App() {
         </header>
 
         {/* Search + controls */}
-        <section className='space-y-3 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-900'>
+        <section className='space-y-3 rounded-2xl border border-sky-200 bg-white p-4 shadow-sm dark:border-sky-700 dark:bg-slate-900'>
           <div className='flex items-center justify-between gap-3'>
             <div className='flex-1'>
               <SearchBar
-                value={nameInput}
-                proteinValue={proteinInput}
-                onChange={setNameInput}
-                onProteinChange={setProteinInput}
+                value={name}
+                onChange={setName}
+                proteinValue={protein}
+                onProteinChange={setProtein}
                 onSubmit={handleSubmit}
               />
             </div>
@@ -162,12 +163,8 @@ export default function App() {
               {recent.map((w) => (
                 <button
                   key={w}
-                  className='rounded-full border border-zinc-200 px-2 py-1 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800'
-                  onClick={() => {
-                    // clicking a chip fills the top input AND runs the search
-                    setNameInput(w);
-                    handleSubmit(w, proteinInput);
-                  }}
+                  className='rounded-full border border-sky-200 bg-sky-50 px-2 py-1 text-sm text-slate-800 hover:bg-sky-100 dark:border-sky-600 dark:bg-slate-800 dark:text-sky-100 dark:hover:bg-slate-700'
+                  onClick={() => handleSubmit(w, '')}
                 >
                   {w}
                 </button>
@@ -178,13 +175,13 @@ export default function App() {
 
         {/* Favorites */}
         {favs.length > 0 && (
-          <section className='rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-900'>
+          <section className='rounded-2xl border border-sky-200 bg-white p-4 shadow-sm dark:border-sky-700 dark:bg-slate-900'>
             <div className='mb-2 flex items-center justify-between'>
-              <h2 className='text-sm font-medium text-zinc-700 dark:text-zinc-300'>
-                Saved words
+              <h2 className='text-sm font-medium text-slate-800 dark:text-sky-100'>
+                Saved dishes
               </h2>
               <button
-                className='text-xs text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'
+                className='text-xs text-sky-700 hover:text-sky-900 dark:text-sky-300 dark:hover:text-sky-100'
                 onClick={() => setFavs([])}
               >
                 Clear favorites
@@ -195,23 +192,19 @@ export default function App() {
               {favs.map((w) => (
                 <span
                   key={w}
-                  className='inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-2 py-1 text-sm dark:border-amber-800 dark:bg-amber-900/30'
+                  className='inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-2 py-1 text-sm dark:border-sky-600 dark:bg-slate-800'
                 >
                   <button
                     className='hover:underline'
-                    onClick={() => {
-                      setNameInput(w);
-                      handleSubmit(w, proteinInput);
-                    }}
+                    onClick={() => handleSubmit(w, '')}
                     aria-label={`Search ${w}`}
                   >
                     ★ {w}
                   </button>
                   <button
-                    className='text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'
-                    aria-label={`Remove ${w} from favorites`}
+                    className='text-slate-600 hover:text-slate-900 dark:text-sky-300 dark:hover:text-sky-100'
+                    aria-label={`Remove ${w}`}
                     onClick={() => removeFav(w)}
-                    title='Remove'
                   >
                     ×
                   </button>
@@ -224,12 +217,13 @@ export default function App() {
         {/* States */}
         {status === 'idle' && <Empty />}
         {status === 'loading' && <Loading />}
+
         {status === 'error' && (
-          <div className='space-y-2 rounded-xl border border-red-300/50 bg-red-50 p-4 dark:bg-red-900/20'>
+          <div className='space-y-2 rounded-xl border border-red-300/60 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/30'>
             <ErrorMessage message={error ?? 'Something went wrong'} />
             <button
               onClick={retry}
-              className='rounded border border-zinc-200 px-2 py-1 text-xs hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800'
+              className='rounded border border-sky-200 bg-sky-50 px-2 py-1 text-xs text-slate-800 hover:bg-sky-100 dark:border-sky-600 dark:bg-slate-800 dark:text-sky-100 dark:hover:bg-slate-700'
             >
               Retry
             </button>
@@ -244,7 +238,7 @@ export default function App() {
                   isFav ? 'Remove from favorites' : 'Save to favorites'
                 }
                 onClick={toggleFav}
-                className='rounded border border-zinc-200 px-2 py-1 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800'
+                className='rounded border border-sky-200 bg-sky-50 px-2 py-1 text-sm text-slate-800 hover:bg-sky-100 dark:border-sky-600 dark:bg-slate-800 dark:text-sky-100 dark:hover:bg-slate-700'
               >
                 {isFav ? '★ Saved' : '☆ Save'}
               </button>
@@ -253,8 +247,8 @@ export default function App() {
             {data.name?.length ? (
               <DishResult data={data} term={query} />
             ) : (
-              <div className='rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900'>
-                <p className='text-sm text-zinc-700 dark:text-zinc-300'>
+              <div className='rounded-xl border border-sky-200 bg-white p-4 dark:border-sky-700 dark:bg-slate-900'>
+                <p className='text-sm text-slate-800 dark:text-sky-100'>
                   No definitions found for that dish.
                 </p>
               </div>
@@ -266,7 +260,7 @@ export default function App() {
         <div className='flex justify-center pt-2'>
           <button
             onClick={clearAllLocal}
-            className='text-xs text-zinc-500 underline hover:text-zinc-800 dark:hover:text-zinc-200'
+            className='text-xs text-sky-700 underline hover:text-sky-900 dark:text-sky-300 dark:hover:text-sky-100'
           >
             Clear all local data
           </button>

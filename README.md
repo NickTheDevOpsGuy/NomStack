@@ -1,6 +1,6 @@
-# 🍴NomStack
+## 🍴 NomStack
 
-_Short tagline about what this project does_ 🦝
+A tiny, fast, privacy-friendly recipe search tool that helps you find dishes instantly — no accounts, no tracking, no fluff. Built because sometimes you just want to look up a meal without getting blasted by ads. 🦝
 
 [![CI](https://github.com/NickTheDevOpsGuy/NomStack/actions/workflows/NomStack.yml/badge.svg)](https://github.com/NickTheDevOpsGuy/NomStack/actions/workflows/NomStack.yml)
 ![Last Commit](https://img.shields.io/github/last-commit/NickTheDevOpsGuy/NomStack)
@@ -17,11 +17,7 @@ _Short tagline about what this project does_ 🦝
 
 ### Main App Demo
 
-![App Demo GIF](./public/assets/preview.gif)
-
-### Feature Highlights
-
-![Feature Showcase](./public/assets/feature.gif)
+![App Demo](./public/assets/preview.gif)
 
 > 🎞️ _Previews are short animated GIFs recorded directly from the live app using screen capture — perfect for quick demos in READMEs._
 
@@ -29,30 +25,39 @@ _Short tagline about what this project does_ 🦝
 
 ## 🚀 Features
 
-- List your main features here
-- Another feature or capability
-- Something unique to highlight
-
----
-
-## 🔒 Privacy
-
-This app is designed for **local use only** — all processing happens in your browser.
+- Super-fast recipe lookup powered by TheMealDB API
+- Clean, minimal UI with TailwindCSS v4
+- Local history tracking with useLocalStorage
+- Recent searches + favorites saved privately in your browser
+- Safe Mode filtering to block unwanted or NSFW results
+- Loading, empty, and error states for a smooth UX
+- Keyboard-friendly search (Enter to submit)
+- TypeScript-first architecture for predictable data handling
+- Component-based structure that’s easy to expand
 
 ---
 
 ## 🗓️ Roadmap
 
-- [ ] Upcoming feature or improvement
-- [ ] Future idea or enhancement
+- [ ] Multi-variant dish view
+- [ ] Better search suggestions
+- [ ] Dark mode polish
+- [ ] Export favorites list
+- [ ] Recipe card sharing
 
 ---
 
 ## 🛠 Tech Stack
 
-- React + Vite
-- TypeScript
-- TailwindCSS v4
+- React 18 — component-driven UI
+- Vite — ultra-fast dev server and bundler
+- TypeScript — strict typing for safer code
+- TailwindCSS v4 — utility-first styling
+- Husky + lint-staged — pre-commit quality checks
+- ESLint + Prettier + Stylelint — consistent formatting and linting
+- GitHub Actions — CI pipeline for linting, building, and type-checking
+- LocalStorage hooks — persisted state for recents, favorites, and preferences
+- TheMealDB API — dish lookup datasource
 
 ---
 
@@ -86,6 +91,7 @@ This app is designed for **local use only** — all processing happens in your b
 
 ```plaintext
 .
+├── eslint.config.ts
 ├── .github
 │   ├── ISSUE_TEMPLATE
 │   │   ├── bug.yml
@@ -99,68 +105,54 @@ This app is designed for **local use only** — all processing happens in your b
 │       └── NomStack.yml
 ├── .gitignore
 ├── .husky
-│   ├── _
-│   │   ├── .gitignore
-│   │   ├── applypatch-msg
-│   │   ├── commit-msg
-│   │   ├── h
-│   │   ├── husky.sh
-│   │   ├── post-applypatch
-│   │   ├── post-checkout
-│   │   ├── post-commit
-│   │   ├── post-merge
-│   │   ├── post-rewrite
-│   │   ├── pre-applypatch
-│   │   ├── pre-auto-gc
-│   │   ├── pre-commit
-│   │   ├── pre-merge-commit
-│   │   ├── pre-push
-│   │   ├── pre-rebase
-│   │   └── prepare-commit-msg
 │   ├── pre-commit
 │   └── pre-push
+├── index.html
+├── LICENSE
+├── package.json
+├── package-lock.json
 ├── .prettierignore
 ├── .prettierrc
 ├── .prettierrc.json
 ├── .prettierrc.yml
-├── .stylelintrc.json
-├── docs
-├── index.html
-├── LICENSE
-├── LICENSE copy
-├── package-lock.json
-├── package.json
 ├── public
-│   ├── .DS_Store
-│   └── assets
-│       ├── .DS_Store
-│       ├── clocksabound.svg
-│       └── preview.gif
-├── README copy.md
+│   ├── assets
+│   │   ├── nomstack.svg
+│   │   └── preview.mp4
 ├── README.md
 ├── scripts
 │   └── precheck.sh
 ├── src
 │   └── app
-│       ├── api
 │       ├── App.tsx
 │       ├── components
-│       ├── features
+│       │   ├── DishResult
+│       │   │   └── DishResult.tsx
+│       │   ├── SearchBar
+│       │   │   └── SearchBar.tsx
+│       │   └── StateDisplay
+│       │       ├── Empty.tsx
+│       │       ├── ErrorMessage.tsx
+│       │       ├── index.ts
+│       │       └── Loading.tsx
 │       ├── hooks
+│       │   ├── useDebouncedValue.ts
+│       │   ├── useDishLookup.ts
 │       │   └── useLocalStorage.ts
-│       ├── lib
 │       ├── main.tsx
-│       ├── pages
 │       ├── styles
 │       │   └── global.css
+│       ├── types
+│       │   └── dish.types.ts
 │       └── utils
-│           └── move.ts
+│           ├── constants.ts
+│           ├── fetchDish.ts
+│           └── normalizeDishData.ts
+├── .stylelintrc.json
 ├── tsconfig.app.json
 ├── tsconfig.json
 ├── tsconfig.node.json
-├── vite-env.d.ts
 └── vite.config.ts
-
 ```
 
 </details>
