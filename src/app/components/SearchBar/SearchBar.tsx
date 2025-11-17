@@ -1,7 +1,7 @@
 interface SearchBarProps {
-  value: string;                          // dish name input
+  value: string; // dish name input
   onChange: (val: string) => void;
-  proteinValue: string;                   // protein input
+  proteinValue: string; // protein input
   onProteinChange: (val: string) => void;
   onSubmit?: (name: string, protein: string) => void;
 }
