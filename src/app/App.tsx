@@ -9,8 +9,9 @@ export default function App() {
   // Active query that drives the API / lookup:
   const { query, setQuery, status, data, error } = useDishLookup('');
 
-  const [name, setName] = useState('');
-  const [protein, setProtein] = useState('');
+  // Form inputs are independent from the active query:
+  const [nameInput, setNameInput] = useState('');
+  const [proteinInput, setProteinInput] = useState('');
 
   // persisted local data
   const [recent, setRecent] = useLocalStorage<string[]>('recent-words', []);
@@ -22,7 +23,7 @@ export default function App() {
     const q = raw.trim().slice(0, 64);
     if (q) {
       setQuery(q);
-      setName(q); // prefill main input from URL if present
+      setNameInput(q); // show initial query in the top input
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -38,13 +39,14 @@ export default function App() {
     window.history.replaceState(null, '', qs ? `${base}?${qs}` : base);
   };
 
-  const handleSubmit = (nameInput: string, proteinInput: string) => {
-    const combined = [nameInput.trim(), proteinInput.trim()]
-      .filter(Boolean)
-      .join(' ');
+  // Called when SearchBar submits (from either field)
+  const handleSubmit = (name: string, protein: string) => {
+    const trimmedName = name.trim().slice(0, 64);
+    const trimmedProtein = protein.trim().slice(0, 64);
 
-    const next = combined.slice(0, 64);
-    if (!next) return;
+    // Prefer dish name; fall back to protein if name is empty
+    const primary = trimmedName || trimmedProtein;
+    if (!primary) return;
 
     // update active query (drives lookup hook)
     setQuery(primary);
@@ -57,13 +59,9 @@ export default function App() {
         ...r.filter((w) => w.toLowerCase() !== primary.toLowerCase()),
       ].slice(0, 5)
     );
-
-    // clear both text fields after submit
-    setName('');
-    setProtein('');
   };
 
-  // Esc key to clear query + inputs
+  // Esc key to clear BOTH inputs and the active query
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -71,8 +69,6 @@ export default function App() {
         setProteinInput('');
         setQuery('');
         pushQueryToUrl('');
-        setName('');
-        setProtein('');
       }
     };
     window.addEventListener('keydown', onKey);
@@ -103,8 +99,10 @@ export default function App() {
 
   // retry on error
   const retry = () => {
-    if (!query.trim()) return;
-    handleSubmit(query, '');
+    const last = query.trim();
+    if (!last) return;
+    setQuery(last);
+    pushQueryToUrl(last);
   };
 
   // wipe all local state
@@ -123,8 +121,6 @@ export default function App() {
     setProteinInput('');
     setQuery('');
     pushQueryToUrl('');
-    setName('');
-    setProtein('');
   };
 
   return (
@@ -136,8 +132,8 @@ export default function App() {
             Nom Stack
           </h1>
           <p className='text-sm text-slate-600 dark:text-slate-300'>
-            Type a dish and press{' '}
-            <kbd className='rounded bg-sky-100 px-1 py-0.5 font-mono text-xs text-slate-800 dark:bg-sky-900/60 dark:text-sky-100'>
+            Type a dish or protein and press{' '}
+            <kbd className='rounded bg-sky-100 px-1 py-0.5 text-xs font-mono text-slate-800 dark:bg-sky-900/60 dark:text-sky-100'>
               Enter
             </kbd>
             .
@@ -149,10 +145,10 @@ export default function App() {
           <div className='flex items-center justify-between gap-3'>
             <div className='flex-1'>
               <SearchBar
-                value={name}
-                onChange={setName}
-                proteinValue={protein}
-                onProteinChange={setProtein}
+                value={nameInput}
+                proteinValue={proteinInput}
+                onChange={setNameInput}
+                onProteinChange={setProteinInput}
                 onSubmit={handleSubmit}
               />
             </div>
@@ -164,7 +160,10 @@ export default function App() {
                 <button
                   key={w}
                   className='rounded-full border border-sky-200 bg-sky-50 px-2 py-1 text-sm text-slate-800 hover:bg-sky-100 dark:border-sky-600 dark:bg-slate-800 dark:text-sky-100 dark:hover:bg-slate-700'
-                  onClick={() => handleSubmit(w, '')}
+                  onClick={() => {
+                    setNameInput(w);
+                    handleSubmit(w, proteinInput);
+                  }}
                 >
                   {w}
                 </button>
@@ -196,7 +195,10 @@ export default function App() {
                 >
                   <button
                     className='hover:underline'
-                    onClick={() => handleSubmit(w, '')}
+                    onClick={() => {
+                      setNameInput(w);
+                      handleSubmit(w, proteinInput);
+                    }}
                     aria-label={`Search ${w}`}
                   >
                     ★ {w}
@@ -205,6 +207,7 @@ export default function App() {
                     className='text-slate-600 hover:text-slate-900 dark:text-sky-300 dark:hover:text-sky-100'
                     aria-label={`Remove ${w}`}
                     onClick={() => removeFav(w)}
+                    title='Remove'
                   >
                     ×
                   </button>
@@ -217,7 +220,6 @@ export default function App() {
         {/* States */}
         {status === 'idle' && <Empty />}
         {status === 'loading' && <Loading />}
-
         {status === 'error' && (
           <div className='space-y-2 rounded-xl border border-red-300/60 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/30'>
             <ErrorMessage message={error ?? 'Something went wrong'} />

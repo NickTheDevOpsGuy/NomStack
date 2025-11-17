@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import { fetchDish } from '@/utils/fetchDish';
-import type { DishEntry, DishVariant } from '@/types/dish.types';
+import type { DishEntry } from '@/types/dish.types';
 import { DEBOUNCE_MS } from '@/utils/constants';
 
 // TheMealDB api endpoint
