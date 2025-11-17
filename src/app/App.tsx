@@ -6,6 +6,7 @@ import { useDishLookup } from '@hooks/useDishLookup';
 import { useLocalStorage } from '@hooks/useLocalStorage';
 
 export default function App() {
+  // Active query that drives the API / lookup:
   const { query, setQuery, status, data, error } = useDishLookup('');
 
   const [name, setName] = useState('');
@@ -26,12 +27,15 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // keep URL in sync
+  // keep URL in sync with the ACTIVE query only
   const pushQueryToUrl = (term: string) => {
     const params = new URLSearchParams(window.location.search);
     if (term) params.set('q', term);
     else params.delete('q');
-    window.history.replaceState(null, '', `?${params.toString()}`);
+
+    const qs = params.toString();
+    const base = window.location.pathname;
+    window.history.replaceState(null, '', qs ? `${base}?${qs}` : base);
   };
 
   const handleSubmit = (nameInput: string, proteinInput: string) => {
@@ -42,14 +46,16 @@ export default function App() {
     const next = combined.slice(0, 64);
     if (!next) return;
 
-    setQuery(next);
-    pushQueryToUrl(next);
+    // update active query (drives lookup hook)
+    setQuery(primary);
+    pushQueryToUrl(primary);
 
+    // update recents by what we actually searched for
     setRecent((r) =>
-      [next, ...r.filter((w) => w.toLowerCase() !== next.toLowerCase())].slice(
-        0,
-        5
-      )
+      [
+        primary,
+        ...r.filter((w) => w.toLowerCase() !== primary.toLowerCase()),
+      ].slice(0, 5)
     );
 
     // clear both text fields after submit
@@ -61,6 +67,8 @@ export default function App() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        setNameInput('');
+        setProteinInput('');
         setQuery('');
         pushQueryToUrl('');
         setName('');
@@ -111,6 +119,8 @@ export default function App() {
     }
     setRecent([]);
     setFavs([]);
+    setNameInput('');
+    setProteinInput('');
     setQuery('');
     pushQueryToUrl('');
     setName('');

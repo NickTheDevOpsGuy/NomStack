@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 interface SearchBarProps {
-  value: string;
+  value: string; // dish name input
   onChange: (val: string) => void;
-  proteinValue: string;
+  proteinValue: string; // protein input
   onProteinChange: (val: string) => void;
   onSubmit?: (name: string, protein: string) => void;
 }
@@ -30,9 +30,7 @@ export function SearchBar({
         onChange={(e) => onChange(e.target.value)}
         placeholder='What dish are you looking for?'
         className='w-full rounded border px-3 py-2'
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') submit();
-        }}
+        onKeyDown={handleKeyDown} // Enter submits
       />
       <input
         type='text'
@@ -40,9 +38,7 @@ export function SearchBar({
         onChange={(e) => onProteinChange(e.target.value)}
         placeholder='Filter by protein (chicken, beef, tofu…)'
         className='mt-2 w-full rounded border px-3 py-2'
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') submit();
-        }}
+        onKeyDown={handleKeyDown} // Enter also submits
       />
     </>
   );
