@@ -1,13 +1,17 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { SearchBar } from '@/components/SearchBar/SearchBar';
 import { DishResult } from '@/components/DishResult/DishResult';
 import { Loading, Empty, ErrorMessage } from '@/components/StateDisplay';
 import { useDishLookup } from '@hooks/useDishLookup';
 import { useLocalStorage } from '@hooks/useLocalStorage';
-import type { DishVariant, DishEntry } from '@/types/dish.types';
 
 export default function App() {
+  // Active query that drives the API / lookup:
   const { query, setQuery, status, data, error } = useDishLookup('');
+
+  // Form inputs are independent from the active query:
+  const [nameInput, setNameInput] = useState('');
+  const [proteinInput, setProteinInput] = useState('');
 
   // persisted local data
   const [recent, setRecent] = useLocalStorage<string[]>('recent-words', []);
@@ -17,37 +21,54 @@ export default function App() {
   useEffect(() => {
     const raw = new URLSearchParams(window.location.search).get('q') ?? '';
     const q = raw.trim().slice(0, 64);
-    if (q) setQuery(q);
+    if (q) {
+      setQuery(q);
+      setNameInput(q); // show initial query in the top input
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // keep URL in sync
+  // keep URL in sync with the ACTIVE query only
   const pushQueryToUrl = (term: string) => {
     const params = new URLSearchParams(window.location.search);
     if (term) params.set('q', term);
     else params.delete('q');
-    window.history.replaceState(null, '', `?${params.toString()}`);
+
+    const qs = params.toString();
+    const base = window.location.pathname;
+    window.history.replaceState(null, '', qs ? `${base}?${qs}` : base);
   };
 
-  const handleSubmit = (term: string) => {
-    const next = term.trim().slice(0, 64);
-    if (!next) return;
+  // Called when SearchBar submits (from either field)
+  const handleSubmit = (name: string, protein: string) => {
+    const trimmedName = name.trim().slice(0, 64);
+    const trimmedProtein = protein.trim().slice(0, 64);
 
-    setQuery(next);
-    pushQueryToUrl(next);
+    // Prefer dish name; fall back to protein if name is empty
+    const primary = trimmedName || trimmedProtein;
+    if (!primary) return;
 
+    // update active query (drives lookup hook)
+    setQuery(primary);
+    pushQueryToUrl(primary);
+
+    // update recents by what we actually searched for
     setRecent((r) =>
-      [next, ...r.filter((w) => w.toLowerCase() !== next.toLowerCase())].slice(
-        0,
-        5
-      )
+      [
+        primary,
+        ...r.filter((w) => w.toLowerCase() !== primary.toLowerCase()),
+      ].slice(0, 5)
     );
+    // NOTE: we do NOT change nameInput/proteinInput here.
+    // They stay whatever the user typed.
   };
 
-  // Esc key to clear query
+  // Esc key to clear BOTH inputs and the active query
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        setNameInput('');
+        setProteinInput('');
         setQuery('');
         pushQueryToUrl('');
       }
@@ -80,8 +101,11 @@ export default function App() {
 
   // retry on error
   const retry = () => {
-    if (!query.trim()) return;
-    handleSubmit(query);
+    const last = query.trim();
+    if (!last) return;
+    // just re-run the last active query
+    setQuery(last);
+    pushQueryToUrl(last);
   };
 
   // wipe all local state
@@ -96,6 +120,8 @@ export default function App() {
     }
     setRecent([]);
     setFavs([]);
+    setNameInput('');
+    setProteinInput('');
     setQuery('');
     pushQueryToUrl('');
   };
@@ -109,7 +135,7 @@ export default function App() {
             Nom Stack
           </h1>
           <p className='text-sm text-zinc-600 dark:text-zinc-400'>
-            Type a dish and press{' '}
+            Type a dish or protein and press{' '}
             <kbd className='rounded bg-zinc-200 px-1 py-0.5 dark:bg-zinc-800'>
               Enter
             </kbd>
@@ -122,10 +148,10 @@ export default function App() {
           <div className='flex items-center justify-between gap-3'>
             <div className='flex-1'>
               <SearchBar
-                value={query}
-                proteinValue={query}
-                onChange={setQuery}
-                onProteinChange={setQuery}
+                value={nameInput}
+                proteinValue={proteinInput}
+                onChange={setNameInput}
+                onProteinChange={setProteinInput}
                 onSubmit={handleSubmit}
               />
             </div>
@@ -137,12 +163,15 @@ export default function App() {
                 <button
                   key={w}
                   className='rounded-full border border-zinc-200 px-2 py-1 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800'
-                  onClick={() => handleSubmit(w)}
+                  onClick={() => {
+                    // clicking a chip fills the top input AND runs the search
+                    setNameInput(w);
+                    handleSubmit(w, proteinInput);
+                  }}
                 >
                   {w}
                 </button>
               ))}
-              F
             </div>
           )}
         </section>
@@ -170,7 +199,10 @@ export default function App() {
                 >
                   <button
                     className='hover:underline'
-                    onClick={() => handleSubmit(w)}
+                    onClick={() => {
+                      setNameInput(w);
+                      handleSubmit(w, proteinInput);
+                    }}
                     aria-label={`Search ${w}`}
                   >
                     ★ {w}
