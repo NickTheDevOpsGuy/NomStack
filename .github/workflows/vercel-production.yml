@@ -1,4 +1,4 @@
-name: Deploy to Vercel
+name: 🍴 NomStack Deploy to Vercel
 
 on:
   push:
@@ -7,7 +7,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: production
+    environment:
+      name: production
+      url: https://nom-stack.vercel.app/
 
     steps:
       - uses: actions/checkout@v4
