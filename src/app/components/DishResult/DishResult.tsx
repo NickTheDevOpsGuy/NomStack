@@ -8,10 +8,11 @@ interface Props {
 
 export function DishResult({ data, term = '' }: Props) {
   const { name, variants } = data;
-  if (!name) return null;
 
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showVariants, setShowVariants] = useState(true);
+
+  if (!name) return null;
 
   return (
     <section className='space-y-4' aria-live='polite'>
