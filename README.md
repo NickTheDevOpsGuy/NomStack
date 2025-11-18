@@ -17,9 +17,13 @@ A tiny, fast, privacy-friendly recipe search tool that helps you find dishes ins
 
 ### Main App Demo
 
-![App Demo](./public/assets/preview.gif)
+Here’s the NomStack experience in motion — real searches, real speed, real UI.
+The GIF is recorded straight from the production build so devs can instantly see how the whole flow feels without firing up the project.
 
-> 🎞️ _Previews are short animated GIFs recorded directly from the live app using screen capture — perfect for quick demos in READMEs._
+![Gif Demo](./public/assets/preview.gif)
+
+> **Taste-test NomStack:** https://nom-stack.vercel.app/  
+> Search anything. Get instant results.
 
 ---
 
